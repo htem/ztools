@@ -11,16 +11,18 @@ print(arr.shape)
 
 arr = np.invert(arr)
 
-roi: Roi = Roi(offset=(0,0,0), shape=Coordinate(arr.shape))
+roi: Roi = Roi(offset=(0, 0, 0), shape=Coordinate(arr.shape))
 print("Roi: ", roi)
 voxel_size: Coordinate = Coordinate(1, 1, 1)
 
-ds = prepare_ds(filename="../tomo_vol.zarr",
-                    ds_name="mouse_cb_full_inverted",
-                    total_roi=roi,
-                    voxel_size=voxel_size,
-                    dtype=np.uint8,
-                    delete=True)
+ds = prepare_ds(
+    filename="../tomo_vol.zarr",
+    ds_name="mouse_cb_full_inverted",
+    total_roi=roi,
+    voxel_size=voxel_size,
+    dtype=np.uint8,
+    delete=True,
+)
 
 ds[roi] = arr
 
