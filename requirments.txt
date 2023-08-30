@@ -1,0 +1,6 @@
+funlib.geometry@ git+https://github.com/funkelab/funlib.geometry
+funlib.persistence@ git+https://github.com/funkelab/funlib.persistence
+numpy
+daisy
+tifffile
+mrcfile

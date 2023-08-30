@@ -1,7 +1,5 @@
 import numpy as np
 from funlib.geometry import Roi
-from funlib.persistence import prepare_ds
-from funlib.geometry import Roi
 from funlib.persistence import prepare_ds, Array
 import daisy
 
