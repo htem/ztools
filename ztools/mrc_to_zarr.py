@@ -1,29 +1,48 @@
 import numpy as np
-from funlib.persistence import prepare_ds
+from funlib.persistence import prepare_ds, Array
 from funlib.geometry import Coordinate, Roi
 import mrcfile
 
 # Load the TIFF image stack
-arr = None
-with mrcfile.open("../mouse_cerebellum_tem_tomo.mrc") as mrc:
-    arr = mrc.data
-print(arr.shape)
+def mrc_to_zarr(in_file_path:str=None,
+                out_file_path:str=None,
+                out_dataset:str=None,
+                voxel_size:tuple=(1,1,1),
+                invert:bool=True) -> None:
+    # set space and load MRC data into a numpy array
+    arr: np.ndarray = None
+    with mrcfile.open(name=in_file_path) as mrc:
+        arr: np.ndarray = mrc.data
 
-arr = np.invert(arr)
+    print("MRC Data Shape: ",arr.shape)
 
-roi: Roi = Roi(offset=(0, 0, 0), shape=Coordinate(arr.shape))
-print("Roi: ", roi)
-voxel_size: Coordinate = Coordinate(1, 1, 1)
+    if invert:
+        arr: np.ndarray = np.invert(arr)
 
-ds = prepare_ds(
-    filename="../tomo_vol.zarr",
-    ds_name="mouse_cb_full_inverted",
-    total_roi=roi,
-    voxel_size=voxel_size,
-    dtype=np.uint8,
-    delete=True,
-)
+    # set Zarr total ROI given the in-memory data shape
+    roi: Roi = Roi(offset=(0, 0, 0), shape=Coordinate(arr.shape))
+    print("Roi: ", roi)
 
-ds[roi] = arr
+    # cast the input voxel size as a Coordinate
+    voxel_size: Coordinate = Coordinate(voxel_size)
 
-print("Image stack saved as Zarr dataset.")
+    # create/open on-disk Zarr to write to
+    ds: Array = prepare_ds(
+        filename=out_file_path,
+        ds_name=out_dataset,
+        total_roi=roi,
+        voxel_size=voxel_size,
+        dtype=np.uint8,
+        delete=True,
+    )
+
+    # write in-memory array to the established Zarr
+    ds[roi] = arr
+
+    print("Image stack saved as Zarr dataset.")
+
+def get_mrc_size() -> tuple:
+    pass
+
+def get_valid_voxel_size() -> tuple:
+    pass

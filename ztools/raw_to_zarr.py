@@ -100,3 +100,10 @@ def raw_to_zarr_blockwise(
     done: bool = daisy.run_blockwise(tasks=[task])
     print("Finished saving Zaarr.")
     return done
+
+
+def get_raw_size() -> tuple:
+    pass
+
+def get_valid_voxel_size() -> tuple:
+    pass
