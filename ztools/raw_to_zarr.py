@@ -4,7 +4,7 @@ from funlib.persistence import prepare_ds, Array
 import daisy
 
 
-def save_volume_to_zarr(
+def raw_to_zarr(
     in_file_path: str = "",
     out_file_path: str = "",
     ds_name: str = "",
@@ -43,7 +43,7 @@ def save_volume_to_zarr(
     print("Finished saving to Zarr.")
 
 
-def save_volume_to_zarr_blockwise(
+def raw_to_zarr_blockwise(
     in_file_path: str = "",
     out_file_path: str = "",
     ds_name: str = "",
