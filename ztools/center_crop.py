@@ -1,6 +1,5 @@
-from funlib.persistence import open_ds, prepare_ds
-from funlib.geometry import Roi, Coordinate, Array
-
+from funlib.persistence import open_ds, prepare_ds, Array
+from funlib.geometry import Roi, Coordinate
 
 def center_crop(
     out_file: str,
@@ -22,7 +21,7 @@ def center_crop(
         )
         return centered_roi
 
-    roi: Roi = get_centered_roi(data_roi=src.data_roi, size=Coordinate(1000, 1000, 1000), voxel_size=src.voxel_size)
+    roi: Roi = get_centered_roi(data_roi=src.data_roi, size=Coordinate(330,330,330), voxel_size=src.voxel_size)
     print("Centered Roi: ", roi)
 
     roi = roi.snap_to_grid(voxel_size=src.voxel_size, mode="closest")
@@ -35,3 +34,11 @@ def center_crop(
                             delete=True)
     out[roi] = src[roi].to_ndarray()
     return True
+
+if __name__ == "__main__":
+    monkey_zarr: str = "../../xray_challenge_entry/data/money_xnh.zarr"
+    center_crop(out_file=monkey_zarr,
+                out_dataset="cropped_33nm",
+                src_file=monkey_zarr,
+                src_dataset="s46_V1_100nm_7_q3_rec")
+
