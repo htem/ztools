@@ -3,27 +3,35 @@ from funlib.persistence import prepare_ds
 from funlib.geometry import Coordinate, Roi
 import tifffile
 
-# Load the TIFF image stack
-tiff_stack = tifffile.imread("../tomo_vol.tif")
+# Load the TIFF image stack and save as a chunked Zarr array to disk
+def tiff_to_zarr(tiff_file:str="/n/groups/htem/users/yazatian/xray/cutouts/monkeyv1axonseg003/img/vol.tiff",
+                out_file:str="../../xray-challenge-entry/data/monkey_xnh.zarr",
+                out_ds:str="volumes/training_raw_003") -> None:
+    tiff_stack: np.ndarray = tifffile.imread(tiff_file)
+    tiff_stack = np.transpose(tiff_stack, (2, 1, 0))
+    print(type(tiff_stack), tiff_stack.shape)
 
-print(type(tiff_stack))
-cropped_array = tiff_stack[0:2000, 0:200, 0:2000]
+    roi: Roi = Roi(offset=(0, 0, 0), shape=Coordinate(100000,100000,100000))
+    print("Roi: ", roi)
+    voxel_size: Coordinate = Coordinate(100, 100, 100)
 
-print(cropped_array.shape)
+    ds = prepare_ds(
+        filename=out_file,
+        ds_name=out_ds,
+        total_roi=roi,
+        voxel_size=voxel_size,
+        dtype=np.uint8,
+        delete=True,
+    )
 
-roi: Roi = Roi(offset=(0, 0, 0), shape=Coordinate(cropped_array.shape))
-print("Roi: ", roi)
-voxel_size: Coordinate = Coordinate(1, 1, 1)
+    ds[roi] = tiff_stack
 
-ds = prepare_ds(
-    filename="../tomo_vol.zarr",
-    ds_name="reslice_8bit_tomo1_vol_alignedv16_imaps",
-    total_roi=roi,
-    voxel_size=voxel_size,
-    dtype=np.uint8,
-    delete=True,
-)
+    print("Image stack saved as Zarr dataset.")
 
-ds[roi] = cropped_array
-
-print("Image stack saved as Zarr dataset.")
+if __name__=="__main__":
+    tiff_to_zarr(tiff_file="/n/groups/htem/users/yazatian/xray/cutouts/monkeyv1axonseg003/img/vol.tiff",
+                 out_ds="volumes/training_raw_003")
+    tiff_to_zarr(tiff_file="/n/groups/htem/users/yazatian/xray/cutouts/monkeyv1axonseg004/img/vol.tiff",
+                 out_ds="volumes/training_raw_004")
+    tiff_to_zarr(tiff_file="/n/groups/htem/users/yazatian/xray/cutouts/monkeyv1axonseg005/img/vol.tiff",
+                out_ds="volumes/training_raw_005")
