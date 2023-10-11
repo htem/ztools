@@ -7,6 +7,7 @@ def center_crop(
     src_file: str,
     src_dataset: str,
 ) -> bool:
+    print(src_file+src_dataset)
     src: Array = open_ds(filename=src_file, ds_name=src_dataset)
     print("Roi: ", src.roi)
     print("Shape: ", src.shape)
@@ -21,7 +22,7 @@ def center_crop(
         )
         return centered_roi
 
-    roi: Roi = get_centered_roi(data_roi=src.data_roi, size=Coordinate(330,330,330), voxel_size=src.voxel_size)
+    roi: Roi = get_centered_roi(data_roi=src.data_roi, size=Coordinate(5000,5000,5000), voxel_size=src.voxel_size)
     print("Centered Roi: ", roi)
 
     roi = roi.snap_to_grid(voxel_size=src.voxel_size, mode="closest")
@@ -36,9 +37,9 @@ def center_crop(
     return True
 
 if __name__ == "__main__":
-    monkey_zarr: str = "../../xray_challenge_entry/data/money_xnh.zarr"
+    monkey_zarr: str = "../../xray-challenge-entry/data/monkey_xnh.zarr"
     center_crop(out_file=monkey_zarr,
-                out_dataset="cropped_33nm",
+                out_dataset="volumes/training_gt_labels_cropped",
                 src_file=monkey_zarr,
-                src_dataset="s46_V1_100nm_7_q3_rec")
+                src_dataset="volumes/training_gt_labels")
 
