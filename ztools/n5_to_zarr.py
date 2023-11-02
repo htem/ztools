@@ -11,9 +11,9 @@ def n5_to_zarr(n5_file:str,
     store = np.transpose(store, (2, 1, 0))
     print(type(store), store.shape)
 
-    roi: Roi = Roi(offset=(0, 48240, 17520), shape=Coordinate(1024, 1024, 1024))
+    roi: Roi = Roi(offset=(0, 0, 0), shape=Coordinate(1024*33, 1024*33, 1024*33)) # desired shape * voxel size
     print("Roi: ", roi)
-    voxel_size: Coordinate = Coordinate(64, 64, 64)
+    voxel_size: Coordinate = Coordinate(33, 33, 33)
 
     ds = prepare_ds(
         filename=out_file,
