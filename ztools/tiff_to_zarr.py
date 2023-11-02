@@ -4,7 +4,7 @@ from funlib.geometry import Coordinate, Roi
 import tifffile
 
 # Load the TIFF image stack and save as a chunked Zarr array to disk
-def tiff_to_zarr(tiff_file:str="/n/groups/htem/users/yazatian/xray/cutouts/monkeyv1axonseg003/img/vol.tiff",
+def tiff_to_zarr(tiff_file:str="/n/groups/htem/users/yazatian/xray/cutouts/monkeyv1axonseg002/img/vol.tiff",
                 out_file:str="../../xray-challenge-entry/data/monkey_xnh.zarr",
                 out_ds:str="volumes/training_raw_003") -> None:
     tiff_stack: np.ndarray = tifffile.imread(tiff_file)
@@ -29,9 +29,5 @@ def tiff_to_zarr(tiff_file:str="/n/groups/htem/users/yazatian/xray/cutouts/monke
     print("Image stack saved as Zarr dataset.")
 
 if __name__=="__main__":
-    tiff_to_zarr(tiff_file="/n/groups/htem/users/yazatian/xray/cutouts/monkeyv1axonseg003/img/vol.tiff",
-                 out_ds="volumes/training_raw_003")
-    tiff_to_zarr(tiff_file="/n/groups/htem/users/yazatian/xray/cutouts/monkeyv1axonseg004/img/vol.tiff",
-                 out_ds="volumes/training_raw_004")
-    tiff_to_zarr(tiff_file="/n/groups/htem/users/yazatian/xray/cutouts/monkeyv1axonseg005/img/vol.tiff",
-                out_ds="volumes/training_raw_005")
+    tiff_to_zarr(tiff_file="/n/groups/htem/users/yazatian/xray/cutouts/monkeyv1axonseg002/img/vol.tiff",
+                 out_ds="volumes/training_raw_002")
